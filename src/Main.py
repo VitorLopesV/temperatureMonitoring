@@ -1,3 +1,7 @@
-print("Hello World")
+from tkinter import *
 
-print("commit 1")
+root=Tk()
+
+root.mainloop()
+
+Tk()
