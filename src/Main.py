@@ -34,7 +34,7 @@ class Main:
         self.root.resizable(False, False)
 
     # Cria os Componentes que serão exibidos na tela principal
-    def create_frame(self, x, y, name, ideal_temperature, variation, temperatue):
+    def create_frame(self, x, y, name, ideal_temperature, variation, temperature):
         self.frame = tk.Frame(self.root, background=GREY_COLOR, highlightbackground="black", highlightthickness=1)
         self.frame.place(relx=x, rely=y, relwidth=0.347, relheight=0.2)
 
@@ -42,16 +42,16 @@ class Main:
         tk.Label(self.frame, text="Temperatura desejada: " + str(ideal_temperature), bg=GREY_COLOR, fg=WHITE_COLOR).pack(anchor='w', padx=10, pady=2)
         tk.Label(self.frame, text="Variação: " + str(variation), bg=GREY_COLOR, fg=WHITE_COLOR).pack(anchor='w', padx=10, pady=2)
 
-        temperarure = tk.Label(self.root, text=temperatue, bg=GREY_COLOR, fg=WHITE_COLOR, font=("Arial", 10))
+        temperarure = tk.Label(self.root, text=temperature, bg=GREY_COLOR, fg=WHITE_COLOR, font=("Arial", 10))
         temperarure.place(relx=x+0.140, rely=y+0.209, relwidth=0.050, relheight=0.050)
 
         color = GREEN_COLOR
 
         # Verifica se a variação da temperatura está dentro da variação configurada.
-        if temperatue > ideal_temperature + variation or temperatue < ideal_temperature - variation:
+        if temperature > ideal_temperature + variation or temperature < ideal_temperature - variation:
             color = "yellow"
         # Verifica se a variação da temperatura excedeu variação configurada.
-        if temperatue > ideal_temperature + (2*variation) or temperatue < ideal_temperature - (2*variation):
+        if temperature > ideal_temperature + (2*variation) or temperature < ideal_temperature - (2*variation):
             color = RED_COLOR
 
         led_example = tk.Canvas(self.frame, width=40, height=40, background=GREY_COLOR, highlightthickness=0)
