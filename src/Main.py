@@ -86,33 +86,33 @@ class Main:
         filemenu=Menu(optionsbar, tearoff=0)
         optionsbar.add_cascade(label="Opções", menu=filemenu)
 
-        filemenu.add_command(label="Editar", command=self.open_popup)
+        filemenu.add_command(label="Editar", command=self.open_options_popup)
         filemenu.add_command(label="Sair", command=self.root.destroy)
 
 # ----POP-UP----
-    # Pop-up de edição
-    def open_popup(self):
-        popup = Toplevel(self.root)
-        popup.title("Edição de Valores")
-        popup.geometry("300x170")
-        popup.resizable(False, False)
-        popup.grab_set()
+    # Pop-up de edição de valores
+    def open_options_popup(self):
+        options_popup = Toplevel(self.root)
+        options_popup.title("Edição de Valores")
+        options_popup.geometry("300x170")
+        options_popup.resizable(False, False)
+        options_popup.grab_set()
 
-        tk.Label(popup, text="Digite a temperatura ideal desejada:").pack(pady=5)
-        temp_ideal_entry = tk.Entry(popup)
+        tk.Label(options_popup, text="Digite a temperatura ideal desejada:").pack(pady=5)
+        temp_ideal_entry = tk.Entry(options_popup)
         temp_ideal_entry.pack(pady=5)
 
-        tk.Label(popup, text="Digite a variação desejada:").pack(pady=5)
-        variation_entry = tk.Entry(popup)
+        tk.Label(options_popup, text="Digite a variação desejada:").pack(pady=5)
+        variation_entry = tk.Entry(options_popup)
         variation_entry.pack(pady=5)
 
-        def confirm():
+        def confirm_options():
             self.ideal_temperature = int(temp_ideal_entry.get())
             self.variation = int(variation_entry.get())
             self.reset_frames()
-            popup.destroy()
+            options_popup.destroy()
 
-        tk.Button(popup, text="Confirmar", command=confirm, bg=GREEN_COLOR, fg=WHITE_COLOR).pack(pady=5)
+        tk.Button(options_popup, text="Confirmar", command=confirm_options, bg=GREEN_COLOR, fg=WHITE_COLOR).pack(pady=5)
 
     # Reseta os frames
     def reset_frames(self):
