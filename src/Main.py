@@ -1,5 +1,6 @@
 from tkinter import *
 import tkinter as tk
+import os
 
 # ----CONSTANTES----
 
@@ -20,18 +21,28 @@ class Main:
         # Status do botão de ligar/desligar monitoramento de temperatura.
         self.status = tk.StringVar(value=VALUE_TO_CONNECT)
 
-        self.ideal_temperature = 20
-        self.variation = 2
+        self.save_options()
 
         self.create_frame(0.090, 0.150, "Sala 1", 23)
-        self.create_frame(0.550, 0.150, "Sala 2", 15)
-        self.create_frame(0.090, 0.440, "Sala 3", 18)
+        self.create_frame(0.550, 0.150, "Sala 2", 18)
+        self.create_frame(0.090, 0.440, "Sala 3", 20)
         self.create_frame(0.550, 0.440, "Sala 4", 25)
         self.create_button()
         self.options()
         self.root.mainloop()
 
-    # Cria a tela principal e define algumas configurações a ela.
+    # Salva os dados de temperatura ideal e variação
+    def save_options(self):
+        if os.path.exists("options.txt"):
+            with open("options.txt", "r") as options_file:
+                lines = options_file.readlines()
+                self.ideal_temperature = int(lines[0])
+                self.variation = int(lines[1])
+        else:
+            self.ideal_temperature = 20
+            self.variation = 2
+
+    # Cria a tela principal e define algumas configurações a ela
     def create_main_frame(self):
         self.root = tk.Tk()
         self.root.title(TITLE_FRAME)
@@ -109,6 +120,11 @@ class Main:
         def confirm_options():
             self.ideal_temperature = int(temp_ideal_entry.get())
             self.variation = int(variation_entry.get())
+
+            with open("options.txt", "w") as options_file:
+                options_file.write(f"{self.ideal_temperature}\n")
+                options_file.write(f"{self.variation}\n")
+
             self.reset_frames()
             options_popup.destroy()
 
