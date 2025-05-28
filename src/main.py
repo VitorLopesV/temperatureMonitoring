@@ -1,17 +1,8 @@
 from tkinter import *
 import tkinter as tk
 import os
-
-# ----CONSTANTES----
-
-TITLE_FRAME = "Controle de Temperatura"     # Título do painel
-VALUE_TO_CONNECT = "Ligar"                  # Texto que fica no botão quando ele está desligado.
-VALUE_TURN_OFF = "Desligar"                 # Texto que fica no botão quando ele está Ligado.
-
-GREY_COLOR = "grey31"                       # Cor cinza-escuro
-WHITE_COLOR = "white"                       # Cor branca
-RED_COLOR = "red"                           # Cor vermelha
-GREEN_COLOR = "green"                       # Cor verde
+from constants import *
+from options_popup import open_options_popup
 
 # ----CLASSE PRINCIPAL----
 class Main:
@@ -33,8 +24,8 @@ class Main:
 
     # Salva os dados de temperatura ideal e variação
     def save_options(self):
-        if os.path.exists("options.txt"):
-            with open("options.txt", "r") as options_file:
+        if os.path.exists("../options.txt"):
+            with open("../options.txt", "r") as options_file:
                 lines = options_file.readlines()
                 self.ideal_temperature = int(lines[0])
                 self.variation = int(lines[1])
@@ -65,7 +56,7 @@ class Main:
 
         # Verifica se a variação da temperatura está dentro da variação configurada.
         if temperature > self.ideal_temperature + self.variation or temperature < self.ideal_temperature - self.variation:
-            color = "yellow"
+            color = YELLOW_COLOR
         # Verifica se a variação da temperatura excedeu variação configurada.
         if temperature > self.ideal_temperature + (2*self.variation) or temperature < self.ideal_temperature - (2*self.variation):
             color = RED_COLOR
@@ -97,38 +88,8 @@ class Main:
         filemenu=Menu(optionsbar, tearoff=0)
         optionsbar.add_cascade(label="Opções", menu=filemenu)
 
-        filemenu.add_command(label="Editar", command=self.open_options_popup)
+        filemenu.add_command(label="Editar", command=lambda: open_options_popup(self))
         filemenu.add_command(label="Sair", command=self.root.destroy)
-
-# ----POP-UP----
-    # Pop-up de edição de valores
-    def open_options_popup(self):
-        options_popup = Toplevel(self.root)
-        options_popup.title("Edição de Valores")
-        options_popup.geometry("300x170")
-        options_popup.resizable(False, False)
-        options_popup.grab_set()
-
-        tk.Label(options_popup, text="Digite a temperatura ideal desejada:").pack(pady=5)
-        temp_ideal_entry = tk.Entry(options_popup)
-        temp_ideal_entry.pack(pady=5)
-
-        tk.Label(options_popup, text="Digite a variação desejada:").pack(pady=5)
-        variation_entry = tk.Entry(options_popup)
-        variation_entry.pack(pady=5)
-
-        def confirm_options():
-            self.ideal_temperature = int(temp_ideal_entry.get())
-            self.variation = int(variation_entry.get())
-
-            with open("options.txt", "w") as options_file:
-                options_file.write(f"{self.ideal_temperature}\n")
-                options_file.write(f"{self.variation}\n")
-
-            self.reset_frames()
-            options_popup.destroy()
-
-        tk.Button(options_popup, text="Confirmar", command=confirm_options, bg=GREEN_COLOR, fg=WHITE_COLOR).pack(pady=5)
 
     # Reseta os frames
     def reset_frames(self):
