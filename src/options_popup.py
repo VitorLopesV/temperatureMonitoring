@@ -1,5 +1,6 @@
 from tkinter import *
 from constants import *
+from tkinter import messagebox
 
 # ----POP-UP----
 # Pop-up de edição de valores
@@ -19,6 +20,14 @@ def open_options_popup(self):
     variation_entry.pack(pady=5)
 
     def confirm_options():
+        if not temp_ideal_entry.get().strip or not variation_entry.get().strip():
+            messagebox.showwarning("Atenção", "É preciso preencher ambos os campos antes de confirmar.")
+            return
+
+        if not temp_ideal_entry.get().isdigit() or not variation_entry.get().isdigit():
+            messagebox.showwarning("Atenção", "Digite apenas números.")
+            return
+
         self.ideal_temperature = int(temp_ideal_entry.get())
         self.variation = int(variation_entry.get())
 

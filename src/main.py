@@ -2,10 +2,8 @@ import os
 import random
 import tkinter as tk
 from tkinter import *
-
 from constants import *
 from options_popup import open_options_popup
-
 
 # ----CLASSE PRINCIPAL----
 class Main:
