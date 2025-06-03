@@ -6,7 +6,7 @@ from constants import *
 from configurations_popup import open_configurations_popup
 
 # ----CLASSE PRINCIPAL----
-class Main:
+class TemperatureControlApp:
     def __init__(self):
         self.create_main_frame()
 
@@ -178,4 +178,4 @@ class Main:
             self.simulate_temperatures()
 
 # Chama a classe principal
-Main()
+TemperatureControlApp()
