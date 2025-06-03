@@ -3,7 +3,7 @@ import random
 import tkinter as tk
 from tkinter import *
 from constants import *
-from options_popup import open_options_popup
+from configurations_popup import open_configurations_popup
 
 # ----CLASSE PRINCIPAL----
 class Main:
@@ -16,7 +16,7 @@ class Main:
         self.ideal_temperature = 20
         self.variation = 2
 
-        self.save_options()
+        self.save_configurations()
 
         self.rooms_data = {}
 
@@ -24,7 +24,7 @@ class Main:
 
         self.create_rooms()
         self.create_button()
-        self.options()
+        self.configurations()
         self.update_all_room_displays()
         self.root.mainloop()
 
@@ -36,10 +36,10 @@ class Main:
         self.setup_room("Sala 4", 0.550, 0.440)
 
     # Salva os dados de temperatura ideal e variação
-    def save_options(self):
-        if os.path.exists("../options.txt"):
-            with open("../options.txt", "r") as options_file:
-                lines = options_file.readlines()
+    def save_configurations(self):
+        if os.path.exists("../configurations.txt"):
+            with open("../configurations.txt", "r") as configurations_file:
+                lines = configurations_file.readlines()
                 self.ideal_temperature = int(lines[0])
                 self.variation = int(lines[1])
         else:
@@ -142,15 +142,15 @@ class Main:
             # Inicia a simulação
             self.simulate_temperatures()
 
-    # Barra de opções
-    def options(self):
-        optionsbar = Menu(self.root)
-        self.root.config(menu=optionsbar)
+    # Barra de configurações
+    def configurations(self):
+        configurations_bar = Menu(self.root)
+        self.root.config(menu=configurations_bar)
 
-        filemenu = Menu(optionsbar, tearoff=0)
-        optionsbar.add_cascade(label="Opções", menu=filemenu)
+        filemenu = Menu(configurations_bar, tearoff=0)
+        configurations_bar.add_cascade(label="configurações", menu=filemenu)
 
-        filemenu.add_command(label="Editar", command=lambda: open_options_popup(self))
+        filemenu.add_command(label="Editar", command=lambda: open_configurations_popup(self))
         filemenu.add_command(label="Sair", command=self.root.destroy)
 
     # Reseta os frames
