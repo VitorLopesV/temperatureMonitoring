@@ -13,9 +13,6 @@ class TemperatureControlApp:
         # Status do botão de ligar/desligar monitoramento de temperatura.
         self.status = tk.StringVar(value=VALUE_TO_CONNECT)
 
-        self.ideal_temperature = 20
-        self.variation = 2
-
         self.save_configurations()
 
         self.rooms_data = {}

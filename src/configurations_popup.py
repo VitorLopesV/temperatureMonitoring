@@ -28,6 +28,10 @@ def open_configurations_popup(self):
             messagebox.showwarning("Atenção", "Digite apenas números.")
             return
 
+        if self.status.get() == VALUE_TURN_OFF:
+            messagebox.showwarning("Atenção", "O monitoramento precisa ser desligado antes de alterar os valores.")
+            return
+
         self.ideal_temperature = int(temp_ideal_entry.get())
         self.variation = int(variation_entry.get())
 
