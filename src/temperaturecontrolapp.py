@@ -83,7 +83,7 @@ class TemperatureControlApp:
             "y": y
         }
 
-    #Atualiza a cor do led.
+    # Atualiza a cor do led.
     def update_room_display(self, room_name):
         room_info = self.rooms_data[room_name]
         current_temperature = room_info["temp_var"].get()
@@ -98,6 +98,8 @@ class TemperatureControlApp:
         if (current_temperature > self.ideal_temperature + (2 * self.variation) or
                 current_temperature < self.ideal_temperature - (2 * self.variation)):
             color = RED_COLOR
+        if current_temperature == 0.0:
+            color = WHITE_COLOR
 
         led_canvas.itemconfig(led_oval_id, fill=color, outline=color)
 
@@ -125,7 +127,7 @@ class TemperatureControlApp:
     def create_button(self):
         self.button = tk.Button(self.root, textvariable=self.status, width=20, command=self.toggle, bg=GREEN_COLOR,
                                 fg=WHITE_COLOR, font=("Arial", 12))
-        self.button.place(relx=0.43, rely=0.85)
+        self.button.place(relx=0.41, rely=0.85)
 
     # Verifica estado do botão e altera quando o botão é clicado.
     def toggle(self):
@@ -136,6 +138,12 @@ class TemperatureControlApp:
             if self.temperature_update_job:
                 self.root.after_cancel(self.temperature_update_job)
                 self.temperature_update_job = None
+            # Zerando as temperaturas das salas quando a simulação for desligada
+            for room_name, room_info in self.rooms_data.items():
+                room_info["temp_var"].set(0.0)
+
+            self.update_all_room_displays()
+
         else:
             self.status.set(VALUE_TURN_OFF)
             self.button.configure(bg=RED_COLOR)
@@ -148,7 +156,7 @@ class TemperatureControlApp:
         self.root.config(menu=configurations_bar)
 
         filemenu = Menu(configurations_bar, tearoff=0)
-        configurations_bar.add_cascade(label="configurações", menu=filemenu)
+        configurations_bar.add_cascade(label="Configurações", menu=filemenu)
 
         filemenu.add_command(label="Editar", command=lambda: open_configurations_popup(self))
         filemenu.add_command(label="Sair", command=self.root.destroy)
