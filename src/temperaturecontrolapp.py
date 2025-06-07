@@ -1,6 +1,9 @@
 import os
 import random
 import tkinter as tk
+import serial
+import threading
+from tkinter import messagebox
 from tkinter import *
 from constants import *
 from configurations_popup import open_configurations_popup
@@ -9,6 +12,10 @@ from configurations_popup import open_configurations_popup
 class TemperatureControlApp:
     def __init__(self):
         self.create_main_frame()
+
+        self.arduino_port = "COM3"
+        self.baud_rate = 9600
+        self.serial_connection = None
 
         # Status do botão de ligar/desligar monitoramento de temperatura.
         self.status = tk.StringVar(value=VALUE_TO_CONNECT)
@@ -23,6 +30,9 @@ class TemperatureControlApp:
         self.create_button()
         self.configurations()
         self.update_all_room_displays()
+
+        self.start_serial_thread()
+
         self.root.mainloop()
 
     # Cria e configura os estoques
@@ -40,7 +50,7 @@ class TemperatureControlApp:
                 self.ideal_temperature = int(lines[0])
                 self.variation = int(lines[1])
         else:
-            self.ideal_temperature = 20
+            self.ideal_temperature = 24
             self.variation = 2
 
     # Cria a tela principal e define algumas configurações a ela
@@ -181,6 +191,24 @@ class TemperatureControlApp:
         # Se o monitoramento estava ligado, reinicia-o
         if self.status.get() == VALUE_TURN_OFF:
             self.simulate_temperatures()
+
+    # Inicia a comunicação serial com o Arduino
+    def start_serial_thread(self):
+        try:
+            self.serial_connection = serial.Serial(self.arduino_port, self.baud_rate, timeout=1)
+            serial_thread = threading.Thread(target=self.read_serial_data, daemon=True)
+            serial_thread.start()
+        except serial.SerialException:
+            messagebox.showerror("Erro no Arduino", "Verifique se a porta COM está correta ou se o Arduino está ativo em algum outro programa.")
+
+    # Lê os dados de temperatura enviados pelo Arduino pela porta serial
+    def read_serial_data(self):
+        while True:
+            if self.serial_connection and self.serial_connection.in_waiting:
+                temp_celsius = self.serial_connection.readline().decode('utf-8').strip()
+                if self.status.get() == VALUE_TURN_OFF:
+                    self.rooms_data["Sala 1"]["temp_var"].set(temp_celsius)
+                    self.update_room_display("Sala 1")
 
 # Chama a classe principal
 TemperatureControlApp()
